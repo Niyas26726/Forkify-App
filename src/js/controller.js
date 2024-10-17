@@ -140,13 +140,14 @@ const showRecipe = async function () {
           </a>
         </div>
 `;
-
-console.log(html);
+// console.log(html);
 recipeContainer.innerHTML = '';
 recipeContainer.insertAdjacentHTML('afterbegin', html);
   } catch (error) {
     alert(error);
   }
 }
-
 showRecipe();
+
+
+
