@@ -1,12 +1,15 @@
 import { async } from "regenerator-runtime";
 import { API_URL } from "./config";
 import { getJson } from "./helper";
+import { RES_PER_PAGE } from "./config";
 
 export const state = {
   recipe: {},
   search:{
     query:'',
     results: [],
+    page: 1,
+    resultsPerPage: RES_PER_PAGE
   },
 }
 
@@ -27,8 +30,6 @@ export const loadRecipes = async function (id) {
       cookingTime: recipe.cooking_time,
       ingredients: recipe.ingredients
     }
-    console.log(state.recipe);
-
   } catch (error) {
     console.log(`${error}💥💥💥💥`);
     throw error;
@@ -50,12 +51,23 @@ export const loadSearchResults = async function (query) {
         image: rec.image_url
       }
     })
-    console.log("query => ", query);
-    console.log(data); 
-    console.log(state.search.results);
-
   } catch (error) {
     console.log(`${error}💥💥💥💥`);
     throw error;
   }
+}
+export const getSearchResultsPage = function (page = state.search.page) {
+  console.log("page => ", page);
+  state.search.page = page;
+  const start = (page - 1) * state.search.resultsPerPage; // 0
+  const end = page * state.search.resultsPerPage; // 10
+  return state.search.results.slice(start, end);
+}
+
+export const updateServings = function (newServings) {
+  console.log("newServings => ", newServings);
+  state.recipe.ingredients.forEach(ing => {
+    ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
+  })
+  state.recipe.servings = newServings;
 }
