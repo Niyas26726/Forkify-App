@@ -1,29 +1,26 @@
 import icons from '../../img/icons.svg';
 import view from './view.js'
-import { Fraction } from 'fraction.js';
 
 class pagenationView extends view {
   _parentEl = document.querySelector('.pagination');
 
+  // Add event listener for click event
   addHandlerClick(handler) {
     this._parentEl.addEventListener('click', function (e) {
+      // Get the closest button element
       const btn = e.target.closest('.btn--inline');
       if (!btn) return;
-      console.log(btn);
+      // Get the page number from the data attribute
       const goToPage = +btn.dataset.goto;
-      console.log(goToPage);
       handler(goToPage);
     })
   }
 
+  // Generate the markup for the pagination
   _generateMarkup() {
-
-    console.log("data",this._data);
     const numOfPages = Math.ceil((this._data.length || this._data.results.length) / this._data.resultsPerPage);
-    let currentPage = this._data.page;
-    console.log("numOfPages data", this._data);
-    console.log(numOfPages);
 
+    let currentPage = this._data.page;
 
     // page 1 and there are other pages
     if (currentPage === 1 && numOfPages > 1) {

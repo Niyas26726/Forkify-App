@@ -1,5 +1,4 @@
-// import icons from '../img/icons.svg'; // Parcel-bundler
-import icons from '../../img/icons.svg';
+import icons from '../../img/icons.svg'; // Parcel-bundler
 import { Fraction } from 'fraction.js';
 import view from './view.js'
 
@@ -7,19 +6,32 @@ class recipeView extends view {
   _parentEl = document.querySelector('.recipe');
   _errorMessage = 'We could not find that recipe. Please try another one!';
   _message = '';
-  
+
+  // Add event listeners to the window object for hashchange and load events
   addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
+  // Add event listeners to the parent element for click events
   addHandlerRenderUpdateServings(handler) {
     this._parentEl.addEventListener('click', function (e) {
-      const btn = e.target.closest('.btn--tiny');
-      if(!btn) return;
-      console.log(btn);
+      const btn = e.target.closest('.btn--update-servings');
+      if (!btn) return;
+      const updateTo = +btn.dataset.updateTo;
+      updateTo >= 1 ? handler(updateTo) : handler(1);
     });
   }
 
+  // Add event listeners to the parent element for click events
+  addHandlerRenderBookmark(handler) {
+    this._parentEl.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--bookmark');
+      if (!btn) return;
+      handler();
+    });
+  }
+
+  // Generate the markup for the recipe
   _generateMarkup() {
     return `
           <figure class="recipe__fig">
@@ -45,12 +57,12 @@ class recipeView extends view {
               <span class="recipe__info-text">servings</span>
 
               <div class="recipe__info-buttons">
-                <button class="btn--tiny btn--increase-servings">
+                <button class="btn--tiny btn--update-servings" data-update-to ="${this._data.servings - 1}">
                   <svg>
                     <use href="${icons}#icon-minus-circle"></use>
                   </svg>
                 </button>
-                <button class="btn--tiny btn--increase-servings">
+                <button class="btn--tiny btn--update-servings" data-update-to ="${this._data.servings + 1}">
                   <svg>
                     <use href="${icons}#icon-plus-circle"></use>
                   </svg>
@@ -58,14 +70,14 @@ class recipeView extends view {
               </div>
             </div>
 
-            <div class="recipe__user-generated">
+            <div class="recipe__user-generated ${this._data.key ? '' : 'hidden'}">
               <svg>
                 <use href="${icons}#icon-user"></use>
               </svg>
             </div>
-            <button class="btn--round">
+            <button class="btn--round btn--bookmark">
               <svg class="">
-                <use href="${icons}#icon-bookmark-fill"></use>
+                <use href="${icons}#icon-bookmark${this._data.bookMarked ? '-fill' : ''}"></use>
               </svg>
             </button>
           </div>
@@ -98,6 +110,7 @@ class recipeView extends view {
         `;
   }
 
+  // Generate the markup for the ingredient
   _generateMarkupIngredient(ing) {
     return `
             <li class="recipe__ingredient">
