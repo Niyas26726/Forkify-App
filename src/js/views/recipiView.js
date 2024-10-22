@@ -1,5 +1,6 @@
-import icons from '../../img/icons.svg'; // Parcel-bundler
+import icons from 'url:../../img/icons.svg'; // Parcel-bundler
 import { Fraction } from 'fraction.js';
+// var Fraction = require ('fraction.js');
 import view from './view.js'
 
 class recipeView extends view {

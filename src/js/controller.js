@@ -7,7 +7,7 @@ import bookMarksView from './views/bookMarksView.js';
 import addRecipeView from './views/addRecipeView.js';
 import { MODAL_CLOSE_SEC } from './config.js';
 // import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+// import 'regenerator-runtime/runtime';
 
 if (module.hot) {
   module.hot.accept();
